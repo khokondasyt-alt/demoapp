@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Fun Service</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4;}
+    header {background:#ff4d4d; color:#fff; padding:15px; text-align:center;}
+    nav button {margin:5px; padding:10px 15px; cursor:pointer;}
+    .container {padding:20px;}
+    .hidden {display:none;}
+    .card {background:#fff; padding:15px; margin:10px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.2);}
+    input, select {padding:8px; margin:5px 0; width:100%; box-sizing:border-box;}
+    button.primary {background:#ff4d4d; color:#fff; border:none; padding:10px; cursor:pointer; border-radius:5px;}
+    button.secondary {background:#ccc; color:#000; border:none; padding:10px; cursor:pointer; border-radius:5px;}
+    .grid {display:flex; flex-wrap:wrap;}
+    .grid .card {flex:1 1 calc(33% - 20px);}
+    @media(max-width:768px){.grid .card{flex:1 1 100%;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Online Fun Service</h1>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('login')">Login</button>
+    <button onclick="showPage('register')">Register</button>
+    <button onclick="showPage('adminLogin')">Admin</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- Home Page -->
+  <div id="home" class="page">
+    <h2>Welcome to Online Fun Service</h2>
+    <p>Connect with models, chat, and video call.</p>
+    <div class="card">
+      <img src="https://via.placeholder.com/300x200" alt="Model" style="width:100%; border-radius:8px;">
+      <h3>Featured Model: Alice</h3>
+    </div>
+  </div>
+
+  <!-- Registration -->
+  <div id="register" class="page hidden">
+    <h2>Register</h2>
+    <div class="card">
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="text" id="regMobile" placeholder="Mobile Number">
+      <input type="password" id="regPassword" placeholder="Password">
+      <select id="regGender">
+        <option value="">Select Gender</option>
+        <option value="male">Male (User)</option>
+        <option value="female">Female (Model)</option>
+      </select>
+      <button class="primary" onclick="registerUser()">Register</button>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="login" class="page hidden">
+    <h2>Login</h2>
+    <div class="card">
+      <input type="text" id="loginMobile" placeholder="Mobile Number">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button class="primary" onclick="loginUser()">Login</button>
+    </div>
+  </div>
+
+  <!-- Admin Login -->
+  <div id="adminLogin" class="page hidden">
+    <h2>Admin Login</h2>
+    <div class="card">
+      <input type="text" id="adminUser" placeholder="Admin Username">
+      <input type="password" id="adminPass" placeholder="Admin Password">
+      <button class="primary" onclick="loginAdmin()">Login</button>
+    </div>
+  </div>
+
+  <!-- User Dashboard -->
+  <div id="userDashboard" class="page hidden">
+    <h2>User Dashboard</h2>
+    <p>See online models and connect:</p>
+    <div class="grid" id="modelsList">
+      <div class="card">
+        <img src="https://via.placeholder.com/150" alt="Model">
+        <h4>Model: Alice</h4>
+        <button class="primary" onclick="alert('Start Video Call')">Video Call</button>
+        <button class="secondary" onclick="alert('Open Chat')">Chat</button>
+        <button class="primary" onclick="alert('Payment Page')">Gift/Payment</button>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/150" alt="Model">
+        <h4>Model: Emma</h4>
+        <button class="primary" onclick="alert('Start Video Call')">Video Call</button>
+        <button class="secondary" onclick="alert('Open Chat')">Chat</button>
+        <button class="primary" onclick="alert('Payment Page')">Gift/Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Dashboard -->
+  <div id="modelDashboard" class="page hidden">
+    <h2>Model Dashboard</h2>
+    <p>Upload photos/videos and manage calls:</p>
+    <div class="card">
+      <input type="file" multiple>
+      <button class="primary" onclick="alert('Files uploaded')">Upload</button>
+    </div>
+    <div class="card">
+      <h3>Call Requests</h3>
+      <button class="primary" onclick="alert('Call Accepted')">Accept</button>
+      <button class="secondary" onclick="alert('Call Rejected')">Reject</button>
+    </div>
+    <div class="card">
+      <h3>Earnings</h3>
+      <p>$120 total</p>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminDashboard" class="page hidden">
+    <h2>Admin Dashboard</h2>
+    <p>Manage users, models, and payments:</p>
+    <div class="card">
+      <button class="primary" onclick="alert('Approve Model')">Approve Model</button>
+      <button class="secondary" onclick="alert('Reject Model')">Reject Model</button>
+    </div>
+    <div class="card">
+      <button class="primary" onclick="alert('View Live Calls')">Monitor Live Calls</button>
+    </div>
+    <div class="card">
+      <button class="primary" onclick="alert('Manage Payments')">Payment Management</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Simple Page Routing
+  function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+    document.getElementById(pageId).classList.remove('hidden');
+  }
+
+  // Dummy User Storage
+  const users = [];
+  const admins = [{username:'admin', password:'admin123'}];
+
+  function registerUser(){
+    const name = document.getElementById('regName').value;
+    const mobile = document.getElementById('regMobile').value;
+    const password = document.getElementById('regPassword').value;
+    const gender = document.getElementById('regGender').value;
+    if(!name||!mobile||!password||!gender){alert('Fill all fields'); return;}
+    users.push({name, mobile, password, gender, approved: gender==='male'?true:false});
+    alert('Registered Successfully!'+(gender==='female'?' Wait for admin approval':''));
+    showPage('login');
+  }
+
+  function loginUser(){
+    const mobile = document.getElementById('loginMobile').value;
+    const password = document.getElementById('loginPassword').value;
+    const user = users.find(u=>u.mobile===mobile && u.password===password);
+    if(!user){alert('Invalid credentials'); return;}
+    if(user.gender==='male'){showPage('userDashboard');}
+    else{ 
+      if(user.approved){showPage('modelDashboard');}
+      else{alert('Wait for admin approval');}
+    }
+  }
+
+  function loginAdmin(){
+    const username = document.getElementById('adminUser').value;
+    const password = document.getElementById('adminPass').value;
+    const admin = admins.find(a=>a.username===username && a.password===password);
+    if(admin){showPage('adminDashboard');}
+    else{alert('Invalid Admin Credentials');}
+  }
+</script>
+
+</body>
+</html>
